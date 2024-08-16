@@ -20,11 +20,11 @@ app.use(express.urlencoded({ extended: true }));
 // })
 //routes
 const auth_route = require("./routers/auth.router");
-
+const book_route = require("./routers/book.router");
 
 //routing
 app.use("/auth", auth_route);
-
+app.use("/book",book_route);
 
 const server = app.listen(PORT, () => {
     console.log(`server running at http://localhost:${PORT}`);
