@@ -60,7 +60,28 @@ const login = async( req, res ) =>{
 
 }
 
+const refreshtoken = async(req, res) =>{
+  const refresh = req.cookies.refresh_token;
+  if (!refresh) {
+    return res.status(401).json({ status: "authorizationError", message: "No refresh token provided" });
+  }
+
+  try {
+    const decoded = jwt.verify(refresh, PRIVATE_KEY);
+    const access_token = await utils.tokenGenerator(decoded.userData);
+    
+    req.user = decoded;
+
+    res.setHeader('Authorization', `Bearer ${access_token}`)
+    res.json({message:"access token created, resend user request"})
+    
+  } catch (error) {
+    return res.status(403).json({ status: "authorizationError", message: "login again"});
+  }
+}
+
 module.exports = {
     register,
-    login
+    login,
+    refreshtoken
 }

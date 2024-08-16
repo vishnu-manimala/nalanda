@@ -25,6 +25,11 @@ const borrow_schema = new mongoose.Schema({
         type: Date ,
         default: null
     },
+    
+    returned: {
+        type: Boolean,
+        default: false
+    }
 
 })
 
