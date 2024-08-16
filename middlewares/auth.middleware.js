@@ -1,0 +1,45 @@
+const jwt = require('jsonwebtoken');
+const  PRIVATE_KEY = process.env.PRIVATE_KEY;
+const helper = require('../utils/helper.functions');
+
+const verifyJwt = async(req,res,next) => {
+
+    const token = req.headers.authorization;
+
+    if(!token){
+        return res.status(400).json({ status: "access denied", message: "No token provided", data:'' })
+    }
+
+    jwt.verify(token,PRIVATE_KEY,async (err, decoded) => {
+        if (err) {
+            await verifyRefreshToken(req,res,next);
+        }
+        req.user = decoded;
+        next();
+      });
+    
+}
+
+const verifyRefreshToken = async(req,res,next)=>{
+    const refreshToken = req.cookies['refreshToken'];
+  if (!refreshToken) {
+    return res.status(401).json({ status: "authorizationError", message: "No refresh token provided",data:'' });
+  }
+
+  try {
+    const decoded = jwt.verify(refreshToken, PRIVATE_KEY);
+    const access_token = await helper.tokenGenerator(decoded.userData);
+    
+    req.user = decoded;
+
+    res.setHeader('Authorization', `Bearer ${access_token}`)
+    next()
+    
+  } catch (error) {
+    return res.status(403).json({ status: "authorizationError", message: "Invalid refresh token",data:'' });
+  }
+}
+
+module.exports = {
+    verifyJwt
+}

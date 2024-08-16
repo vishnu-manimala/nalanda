@@ -5,13 +5,13 @@ const Book = require('./book.model');
 const borrow_schema = new mongoose.Schema({
     
     user: { 
-        type: ObjectId, 
+        type: mongoose.Schema.Types.ObjectId, 
         ref: 'User',
         required: true,
     },
 
     book: { 
-        type: ObjectId, 
+        type: mongoose.Schema.Types.ObjectId, 
         ref: 'Book',
         required: true,
     },

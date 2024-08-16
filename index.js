@@ -14,13 +14,16 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// app.post('/auth/register.admin',(req,res)=>{
+//     console.log(req.body);
+//     res.send(req.body);
+// })
 //routes
+const auth_route = require("./routers/auth.router");
 
 
 //routing
-app.get('/', (req, res) =>{
-    res.send("hii, i am working");
-})
+app.use("/auth", auth_route);
 
 
 const server = app.listen(PORT, () => {

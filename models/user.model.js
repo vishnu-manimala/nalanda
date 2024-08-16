@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Borrow = require('./borrow.model');
+const { refreshTokenGenerator } = require('../utils/shared.functions');
 
 const user_schema = new mongoose.Schema({
 
@@ -26,9 +27,13 @@ const user_schema = new mongoose.Schema({
       },
 
     borrow_history: [{
-        type: ObjectId, 
+        type: mongoose.Schema.Types.ObjectId, 
         ref: 'Borrow'
       }],
+
+      refresh_token:{
+        type: String
+      },
 
       createdAt:{
         type:Date,
