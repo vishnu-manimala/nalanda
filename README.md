@@ -3,7 +3,6 @@ Nalanda
 
 POST
 https://nalanda.store/auth/login
-https://nalanda.store/auth/login
 user or admin can logn using this end point. email and password should be proviuded with this end point in body. the response will be an object .
 example.
 {    "message": "Login successful",   
