@@ -24,12 +24,14 @@ app.use(express.urlencoded({ extended: true }));
 //routes
 const auth_route = require("./routers/auth.router");
 const book_route = require("./routers/book.router");
-const borrow_route = require("./routers/book.router");
+const borrow_route = require("./routers/borrow.router");
+const admin_route = require("./routers/admin.router");
 
 //routing
 app.use("/auth", auth_route);
 app.use("/book",book_route);
 app.use("/borrow",borrow_route);
+app.use("/admin",admin_route);
 
 const server = app.listen(PORT, () => {
     console.log(`server running at http://localhost:${PORT}`);

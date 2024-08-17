@@ -3,15 +3,15 @@ const Book = require('../models/book.model');
 const add_book = async(req,res) =>{
 
      try{
-        const { tittle, author, isbn, published_date, genre, copies } = req.body;
+        const { tittle, author, isbn, publicationDate, genre, availableCopies } = req.body;
         console.log(req.body)
         const book_added = await Book.create({
             title: tittle,
             author:author,
             isbn: isbn,
-            publicationDate: published_date,
+            publicationDate: publicationDate,
             genre: genre,
-            availableCopies: copies
+            availableCopies: availableCopies
         });
 
         console.log(book_added);
@@ -81,6 +81,7 @@ const list_books = async(req, res)=>{
     if (title) filter.title = new RegExp(title, 'i');
     if (author) filter.author = new RegExp(author, 'i');
     if (genre) filter.genre = new RegExp(genre, 'i');
+    filter.isDeleted = false;
   
     try {
       const books = await Book.aggregate([

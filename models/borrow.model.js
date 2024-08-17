@@ -33,4 +33,4 @@ const borrow_schema = new mongoose.Schema({
 
 })
 
-module.exports = mongoose.model('borrow',borrow_schema);
+module.exports = mongoose.model('Borrow',borrow_schema);

@@ -13,7 +13,7 @@ const most_borrowed_book = async( req, res) =>{
           },
           {
             $lookup: {
-              from: 'books',
+              from: 'book',
               localField: 'book',
               foreignField: '_id',
               as: 'book'
@@ -37,7 +37,7 @@ const most_borrowed_book = async( req, res) =>{
             $limit: 10 
           }
         ]);
-    
+        console.log(max_borrowed_books)
         res.status(200).json({message: "succesfully fetched data", data: max_borrowed_books});
 
       } catch (error) {
@@ -59,28 +59,28 @@ const active_members = async( req, res ) => {
           },
           {
             $lookup: {
-              from: 'users',
+              from: 'user',
               localField: 'user',
               foreignField: '_id',
               as: 'user'
             }
           },
-          {
-            $unwind: '$user'
-          },
-          {
-            $project: {
-              userId: '$_id',
-              name: '$user.name',
-              borrowCount: '$count'
-            }
-          },
-          {
-            $sort: { borrowCount: -1 }
-          },
-          {
-            $limit: 10 
-          }
+          // {
+          //   $unwind: '$user'
+          // },
+          // {
+          //   $project: {
+          //     userId: '$_id',
+          //     name: '$user.name',
+          //     borrowCount: '$count'
+          //   }
+          // },
+          // {
+          //   $sort: { borrowCount: -1 }
+          // },
+          // {
+          //   $limit: 10 
+          // }
         ]);
     
         res.json({message:" data succesfully fetched", data: most_active_members});
@@ -95,34 +95,34 @@ const active_members = async( req, res ) => {
 const book_availability = async(req, res) => {
     try {
         const borrowed_books_data = await Borrow.aggregate([
-          {
-            $match: { returned: false }
-          },
-          {
-            $group: {
-              _id: '$book',
-              count: { $sum: 1 }
-            }
-          },
+          // {
+          //   $match: { returned: false }
+          // },
+          // {
+          //   $group: {
+          //     _id: '$book',
+          //     count: { $sum: 1 }
+          //   }
+          // },
           {
             $lookup: {
-              from: 'books',
-              localField: '_id',
+              from: 'book',
+              localField: 'book',
               foreignField: '_id',
               as: 'book'
             }
           },
-          {
-            $unwind: '$book'
-          },
-          {
-            $project: {
-              bookId: '$_id',
-              title: '$book.title',
-              borrowCount: '$count',
-              availableCopies: '$book.availableCopies'
-            }
-          }
+          // {
+          //   $unwind: '$book'
+          // },
+          // {
+          //   $project: {
+          //     bookId: '$_id',
+          //     title: '$book.title',
+          //     borrowCount: '$count',
+          //     availableCopies: '$book.availableCopies'
+          //   }
+          // }
         ]);
     
         
@@ -133,7 +133,7 @@ const book_availability = async(req, res) => {
 
         console.error(error);
         res.status(500).json({ error: 'Error fetching book availability' });
-        
+
       }
 }
 

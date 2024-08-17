@@ -15,7 +15,7 @@ const password_match = (password, user_data) => {
 
 const tokenGenerator = async (data) => {
 
-    const token = jwt.sign({ userData: data }, PRIVATE_KEY, { expiresIn: '1d' });
+    const token = jwt.sign(data , PRIVATE_KEY, { expiresIn: '1d' });
     return token;
 
 }

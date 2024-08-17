@@ -49,8 +49,8 @@ const login = async( req, res ) =>{
 
       }
 
-      const access_token = await utils.tokenGenerator(user_data);
-      const refresh_token = await utils.refreshTokenGenerator(user_data);
+      const access_token = await utils.tokenGenerator({_id:user_data._id, email:user_data.email, role: user_data.role});
+      const refresh_token = await utils.refreshTokenGenerator({_id:user_data._id, email:user_data.email, role: user_data.role});
 
       const save_token = await User.updateOne({_id:user_data._id},{$set:{refresh_token: refresh_token}});
 
@@ -68,7 +68,7 @@ const refreshtoken = async(req, res) =>{
 
   try {
     const decoded = jwt.verify(refresh, PRIVATE_KEY);
-    const access_token = await utils.tokenGenerator(decoded.userData);
+    const access_token = await utils.tokenGenerator({_id:decoded._id, email:decoded.email, role:decoded.role});
     
     req.user = decoded;
 

@@ -45,7 +45,7 @@ const borrow_book = async (req, res) => {
 
 const return_book = async (req, res) => {
 
-    const { borrow_id } = req.params;
+    const borrow_id  = req.params.id;
     const user_id = req.user._id;
 
     try {
@@ -57,12 +57,11 @@ const return_book = async (req, res) => {
         if (borrow.user.toString() !== user_id.toString()) {
             return res.status(403).json({ message: 'Unauthorized' });
         }
+        const borrow_update = await Borrow.findByIdAndUpdate(borrow_id, {$set:{ returned: true, returnDate:new Date() }}, { new: true });
 
-        const book = await Book.findById(borrow.book);
+        const book = await Book.findOne({_id:borrow.book});
         book.availableCopies++;
         await book.save();
-
-        await User.findByIdAndUpdate(user_id, { $set: { returned: true } });
 
         res.status(200).json({ message: 'Book returned successfully' });
     } catch (error) {
@@ -74,10 +73,10 @@ const return_book = async (req, res) => {
 }
 
 const borrow_history = async (req, res) => {
-        const { user_id } = req.user._id;
-      
+        const user_id  = req.user._id;
+
         try {
-          const borrows = await Borrow.find({ _id: user_id })
+          const borrows = await Borrow.find({ user: user_id })
             .populate('book') 
             .sort('-createdAt'); 
             console.log(borrows);
@@ -85,7 +84,7 @@ const borrow_history = async (req, res) => {
           res.status(200).json({data:borrows, message:" data fetched succesfully"});
 
         } catch (error) {
-          console.error(error);
+          console.error(error.message);
           res.status(500).json({ error: 'Error fetching borrow history' });
         }
       
