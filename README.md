@@ -1,170 +1,192 @@
-Nalanda
-﻿
+Nalanda Library Management System API Documentation
 
-POST
-https://nalanda.store/auth/login
-user or admin can logn using this end point. email and password should be proviuded with this end point in body. the response will be an object .
-example.
-{    "message": "Login successful",   
+Nalanda is a backend system designed to manage library operations efficiently. It provides a robust API for interacting with library data, including book management, user accounts, and borrowing/returning books.
 
-"data": {       
+This documentation outlines the endpoints, request/response formats, and authentication mechanisms for the Nalanda API.
 
-"_id": "66c0ddb262076632b61d5072",       
 
-"name": "vijith",  "email": "vijith@gmail.com", 
+Authentication
 
-"password": "$2b$10$x3lotOF71oa664NojoUAgeOagUjMjN4vU6bA9NQ74P1Bp/5qxDbxy",        "role": "admin",        "borrow_history": [],       
+  1. Login (POST https://nalanda.store/auth/login)
 
-"createdAt": "2024-08-17T17:28:18.602Z",       
+      Description: Authenticates a user with their email and password.
+      Request Body:
+          email (string): User's email address.
+          password (string): User's password.
+      Response:
+          Success (200 OK):
+          accessToken: (string) JWT access token for authorized requests.
+          refreshToken: (string) Long-lived token for refreshing access token.
 
-"__v": 0    }
+          Failure (401 Unauthorized): Invalid credentials or other authentication errors.
+                  
+      
+  2. Register (POST https://nalanda.store/auth/register)
+      
+      Description: Creates a new user account.
+      Request Body:
+          name (string): User's full name.
+          email (string): User's email address.
+          password (string): User's password.
+          role (string):  "member" | "user".
+     
+      Response:
+          Success (201 Created): 
+          message: "Registration successful"
+          Failure (500): server error.
+         
+  3. Refresh token (POST https://nalanda.store/auth/refreshtoken)
 
-}
+      Description: to recreate a accesstoken if the sending refresh token is valid otherwise it will send an error messgae which says login again.
+     
+      Request Body:
+          send refresh token in cookies.
 
-﻿
+      Response:
+          Success (200 OK): new accestoken is returned
+          accessToken: (string) JWT access token for authorized requests.
+          
 
-Body
-urlencoded
-email
-password
-POST
-https://nalanda.store/auth/register
-https://nalanda.store/auth/register
-user can register using end point. ens point should conatin the role.
-response will be an object.
-{    "status": "success",    "message": " successfully registered"}
+          Failure (403 ): Invalid credentials or other authentication errors so login again.
 
-﻿
 
-Body
-urlencoded
-name
-vijith
-should be string
+User Actions (Requires Authentication) https://nalanda.store/borrow
 
-email
-vijith@gmail.com
-should be string
+  1. Borrow Book  (POST https://nalanda.store/borrow/book)
+          Description: Borrows a book for a user.
+          Path Parameters:
+              bookId (string): ID of the book to borrow.
+              Authorization: Bearer token
+     
+          Response:
+              Success (200 OK):
+              message: "Book borrowed successfully"
+              
+              Failure (400 Bad Request): Book unavailable or other errors.
+              Failure (401 Unauthorized): Unauthorized access.
+              Failure (404 Not Found): Book not found in db.
+              Failure (500 internal server error): internal server error.
+     
+  3. Return Book  (POST https://nalanda.store/borrow/return)
+        Description: Returns a borrowed book.
+        Path Parameters:
+            borrowId (string): ID of the borrow record.
+            Authorization: Bearer token
+        Response:
+            Success (200 OK):
+            message: "Book returned successfully"
+            Failure (400 Bad Request): Invalid borrow ID or other errors.
+            Failure (401 Unauthorized): Unauthorized access.
+            Failure (404 Not Found): Book not found in db.
+            Failure (500 internal server error): internal server error.
+     
+  5. Borrow history  (POST https://nalanda.store/borrow/history)
+            Description: Retrieves a list of books borrowed by the authenticated user.
+            Authorization: Bearer token
+            Response:
+              Success (200 OK):
+              Array of borrow records, each containing book details and borrow/return dates.
+              Failure (401 Unauthorized): Unauthorized access.﻿
+              Failure (500 internal server error): internal server error.
 
-password
-vijith123
-should be string
+Book Management (Admin Only) - https://nalanda.store/book/
 
-role
-admin
-either admin or member
+  1. Add Book (POST https://nalanda.store/book/add)
 
-POST
-https://nalanda.store/auth/refreshtoken
-https://nalanda.store/auth/refreshtoken
-this end point is used to send refresh token to backend to generate accesstoken in case the access token is expired. refresh token should be added from cookie
+              Description: Adds a new book to the library.
+              Request Body:
+                  title (string): Book title.
+                  author (string): Book author.
+                  isbn (number): Book ISBN.
+                  publicationDate (string): Book publication date (format: DD/MM/YYYY).
+                  genre (string): Book genre.
+                  availableCopies (number): Number of available copies.
+                  Authorization: Bearer token.
+     
+              Response:
+                  Success (201 Created):
+                  Success message
+                  Failure (400 Bad Request): Invalid or missing data in request body.
+                  Failure (401 Unauthorized): Unauthorized access.
+                  Failure (403 Forbidden): You do not have permission to access this resource. (not admin).
 
-﻿
+2. Edit Book (PATCH   https://nalanda.store/book/edit/:id)
 
-POST
-https://nalanda.store/book/add?title&author&isbn&publicationDate&genre&availableCopies
-https://nalanda.store/book/add
-bearer token should be added to the authorization.
+              Description: Edits an existing book.
+              Path Parameters:
+                  bookId (string): ID of the book to edit.
+   
+              Request Body:
+                  All fields of book with your changed data
+                  Authorization: Bearer token with admin role.
+   
+              Response:
+                  Success (200 OK):
+                  Updated book details.
+                  Failure (400 Bad Request): Invalid or missing data in request body.
+                  Failure (401 Unauthorized): Unauthorized access.
+                  Failure (403 Forbidden): Insufficient permissions (not admin).
+                  Failure (500 server error): something went wrong.
 
-﻿
+   
+3. Delete Book (DELETE   (https://nalanda.store/book/delete/:id)) 
 
-Authorization
-Bearer Token
-Token
-<token>
-Body
-urlencoded
-title
-mathilukal
-author
-basheer
-isbn
-4356764323
-publicationDate
-12/02/1995
-genre
-novel
-availableCopies
-23
-PATCH
-https://nalanda.store/book/edit
-https://nalanda.store/book/edit
-﻿
+              Description: Deletes a book from the library.
+              Path Parameters:
+                  bookId (string): ID of the book to delete.
+                  Authorization: Bearer token with admin role.
+              Response:
+                  Success (204 No Content): Book deleted successfully.
+                  Failure (401 Unauthorized): Unauthorized access.
+                  Failure (403 Forbidden): Insufficient permissions (not admin).
+                  Failure (404 Not Found): Book not found.
 
-Body
-urlencoded
-title
-author
-isbn
-publicationDate
-genre
-availableCopies
-DELETE
-https://nalanda.store/book/delete/id
-https://nalanda.store/book/delete/id
-﻿https://nalanda.store/book/delete/id this end point is used to delete a book from book data base so the is of the book should be mention as a param. and token should be added in authorization as bearer token.
+   4. List Books (GET https://nalanda.store/book/list) - all users can see this list
 
-﻿
+              Description: Retrieves a list of books with optional filtering and pagination.
 
-GET
-https://nalanda.store/book/list
-https://nalanda.store/book/list?page&author&genre&tittle
-this end point is for retrieving book list from server with pagination adn filter. so these data shoul be sent as query along with the request
+              Query Parameters:
+                  page (number): Page number.
+                  author (string): Filter by author.
+                  genre (string): Filter by genre.
+                  title (string): Filter by title.
+                  Authorization: Bearer token (optional for public book listings).
+              Response:
+                  Success (200 OK):
+                  Array of book objects withrespect to pagination and filter information .
+                  Failure (401 Unauthorized): Unauthorized access for restricted book data.
+                  Server nerror (500)
 
-﻿
+    5. Most Borrowed Books (GET https://nalanda.store/admin/most_borrowed_book)
+            Description: Retrieves a list of the most borrowed books.
+            Authorization: Bearer token with admin role.
+            Response:
+                Success (200 OK):
+                Array of objects with book details and borrow count.
+                Failure (401 Unauthorized): Unauthorized access.
+                Failure (403 Forbidden): Insufficient permissions (not admin).
+                Server nerror (500)
+       
+    6. Most Active Members  (GET https://nalanda.store/admin/active_members)
 
-Query Params
-page
-number
+            Description: Retrieves a list of the most active members based on borrow count.
+            Authorization: Bearer token with admin role.
+            Response:
+                Success (200 OK):
+                Array of user objects with borrow count.
+                Failure (401 Unauthorized): Unauthorized access.
+                Failure (403 Forbidden): Insufficient permissions (not admin).
+       
+7. Book Availability (GET https://nalanda.store/admin/book_availability)
 
-author
-string
+          Description: Retrieves a summary of book availability.
+          Authorization: Bearer token with admin role.
+          Response:
+                Success (200 OK):
+                Object with totalBooks, totalBorrowedBooks, and availableBooks counts.
+                Failure (401 Unauthorized): Unauthorized access.
+                Failure (403 Forbidden): Insufficient permissions (not admin).
 
-genre
-string
 
-tittle
-string
 
-POST
-https://nalanda.store/borrow/book/id
-https://nalanda.store/borrow/book/id
-This end point is for borrow book from nalanda. so the book shoulbd be sent with request as param.
-
-﻿
-
-POST
-http://localhost:3000/borrow/return/66bfa43dc41c9fd6939f5efa
-http://localhost:3000/borrow/return/66bfa43dc41c9fd6939f5efa
-This end point is for returning a book that you borrowed before. the id should be send as param with this request.
-
-﻿
-
-GET
-http://localhost:3000/borrow/history
-http://localhost:3000/borrow/history
-This end point is for requesting borrow history from server. access token should be sent with this reuest as it sends with all the request.
-
-﻿
-
-GET
-https://nalanda.store/admin/most_borrowed_book
-https://nalanda.store/admin/most_borrowed_book
-this end point will get you most borroed book from server.
-
-﻿
-
-GET
-https://nalanda.store/admin/active_members
-https://nalanda.store/admin/active_members
-this end point will get you the most active menvers from server with user datails.
-
-﻿
-
-GET
-https://nalanda.store/admin/book_availability
-https://nalanda.store/admin/book_availability
-This end point is for getting available book from server. token will be sent over request as usual.
-
-﻿
 
