@@ -110,7 +110,7 @@ Book Management (Admin Only) - https://nalanda.store/book/
                   Failure (401 Unauthorized): Unauthorized access.
                   Failure (403 Forbidden): You do not have permission to access this resource. (not admin).
 
-2. Edit Book (PATCH   https://nalanda.store/book/edit/:id)
+  2. Edit Book (PATCH   https://nalanda.store/book/edit/:id)
 
               Description: Edits an existing book.
               Path Parameters:
@@ -129,7 +129,7 @@ Book Management (Admin Only) - https://nalanda.store/book/
                   Failure (500 server error): something went wrong.
 
    
-3. Delete Book (DELETE   (https://nalanda.store/book/delete/:id)) 
+  3. Delete Book (DELETE   (https://nalanda.store/book/delete/:id)) 
 
               Description: Deletes a book from the library.
               Path Parameters:
@@ -177,7 +177,7 @@ Book Management (Admin Only) - https://nalanda.store/book/
                 Failure (401 Unauthorized): Unauthorized access.
                 Failure (403 Forbidden): Insufficient permissions (not admin).
        
-7. Book Availability (GET https://nalanda.store/admin/book_availability)
+    7. Book Availability (GET https://nalanda.store/admin/book_availability)
 
           Description: Retrieves a summary of book availability.
           Authorization: Bearer token with admin role.
