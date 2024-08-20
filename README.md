@@ -1,6 +1,6 @@
 Nalanda Library Management System API Documentation
 
-Nalanda is a backend system designed to manage library operations efficiently. It provides a robust API for interacting with library data, including book management, user accounts, and borrowing/returning books.
+Nalanda is a backend system designed to manage library operations efficiently. It provides a robust API for interacting with library data, including book management, user accounts, and borrowing/returning books. It is hosted in AWS EC2. 
 
 This documentation outlines the endpoints, request/response formats, and authentication mechanisms for the Nalanda API.
 
