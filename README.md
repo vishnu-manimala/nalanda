@@ -7,7 +7,7 @@ This documentation outlines the endpoints, request/response formats, and authent
 
 Authentication
 
-  1. Login (POST https://nalanda.store/auth/login)
+  1. Login (POST https://nalanda-18pz.onrender.com/auth/login)
 
       Description: Authenticates a user with their email and password.
       Request Body:
@@ -21,7 +21,7 @@ Authentication
           Failure (401 Unauthorized): Invalid credentials or other authentication errors.
                   
       
-  2. Register (POST https://nalanda.store/auth/register)
+  2. Register (POST https://nalanda-18pz.onrender.com/auth/register)
       
       Description: Creates a new user account.
       Request Body:
@@ -35,7 +35,7 @@ Authentication
           message: "Registration successful"
           Failure (500): server error.
          
-  3. Refresh token (POST https://nalanda.store/auth/refreshtoken)
+  3. Refresh token (POST https://nalanda-18pz.onrender.com/auth/refreshtoken)
 
       Description: to recreate a accesstoken if the sending refresh token is valid otherwise it will send an error messgae which says login again.
      
@@ -50,9 +50,9 @@ Authentication
           Failure (403 ): Invalid credentials or other authentication errors so login again.
 
 
-User Actions (Requires Authentication) https://nalanda.store/borrow
+User Actions (Requires Authentication) https://nalanda-18pz.onrender.com
 
-  1. Borrow Book  (POST https://nalanda.store/borrow/book)
+  1. Borrow Book  (POST https://nalanda-18pz.onrender.com/borrow/book)
           Description: Borrows a book for a user.
           Path Parameters:
               bookId (string): ID of the book to borrow.
@@ -67,7 +67,7 @@ User Actions (Requires Authentication) https://nalanda.store/borrow
               Failure (404 Not Found): Book not found in db.
               Failure (500 internal server error): internal server error.
      
-  3. Return Book  (POST https://nalanda.store/borrow/return)
+  3. Return Book  (POST https://nalanda-18pz.onrender.com/borrow/return)
         Description: Returns a borrowed book.
         Path Parameters:
             borrowId (string): ID of the borrow record.
@@ -80,7 +80,7 @@ User Actions (Requires Authentication) https://nalanda.store/borrow
             Failure (404 Not Found): Book not found in db.
             Failure (500 internal server error): internal server error.
      
-  5. Borrow history  (POST https://nalanda.store/borrow/history)
+  5. Borrow history  (POST https://nalanda-18pz.onrender.com/borrow/history)
             Description: Retrieves a list of books borrowed by the authenticated user.
             Authorization: Bearer token
             Response:
@@ -89,9 +89,9 @@ User Actions (Requires Authentication) https://nalanda.store/borrow
               Failure (401 Unauthorized): Unauthorized access.﻿
               Failure (500 internal server error): internal server error.
 
-Book Management (Admin Only) - https://nalanda.store/book/
+Book Management (Admin Only) - https://nalanda-18pz.onrender.com/book/
 
-  1. Add Book (POST https://nalanda.store/book/add)
+  1. Add Book (POST https://nalanda-18pz.onrender.com/book/add)
 
               Description: Adds a new book to the library.
               Request Body:
@@ -110,7 +110,7 @@ Book Management (Admin Only) - https://nalanda.store/book/
                   Failure (401 Unauthorized): Unauthorized access.
                   Failure (403 Forbidden): You do not have permission to access this resource. (not admin).
 
-  2. Edit Book (PATCH   https://nalanda.store/book/edit/:id)
+  2. Edit Book (PATCH   https://nalanda-18pz.onrender.com/book/edit/:id)
 
               Description: Edits an existing book.
               Path Parameters:
@@ -129,7 +129,7 @@ Book Management (Admin Only) - https://nalanda.store/book/
                   Failure (500 server error): something went wrong.
 
    
-  3. Delete Book (DELETE   (https://nalanda.store/book/delete/:id)) 
+  3. Delete Book (DELETE   (https://nalanda-18pz.onrender.com/book/delete/:id)) 
 
               Description: Deletes a book from the library.
               Path Parameters:
@@ -141,7 +141,7 @@ Book Management (Admin Only) - https://nalanda.store/book/
                   Failure (403 Forbidden): Insufficient permissions (not admin).
                   Failure (404 Not Found): Book not found.
 
-   4. List Books (GET https://nalanda.store/book/list) - all users can see this list
+   4. List Books (GET https://nalanda-18pz.onrender.com/book/list) - all users can see this list
 
               Description: Retrieves a list of books with optional filtering and pagination.
 
@@ -157,7 +157,7 @@ Book Management (Admin Only) - https://nalanda.store/book/
                   Failure (401 Unauthorized): Unauthorized access for restricted book data.
                   Server nerror (500)
 
-    5. Most Borrowed Books (GET https://nalanda.store/admin/most_borrowed_book)
+    5. Most Borrowed Books (GET https://nalanda-18pz.onrender.com/admin/most_borrowed_book)
             Description: Retrieves a list of the most borrowed books.
             Authorization: Bearer token with admin role.
             Response:
@@ -167,7 +167,7 @@ Book Management (Admin Only) - https://nalanda.store/book/
                 Failure (403 Forbidden): Insufficient permissions (not admin).
                 Server nerror (500)
        
-    6. Most Active Members  (GET https://nalanda.store/admin/active_members)
+    6. Most Active Members  (GET https://nalanda-18pz.onrender.com/admin/active_members)
 
             Description: Retrieves a list of the most active members based on borrow count.
             Authorization: Bearer token with admin role.
@@ -177,7 +177,7 @@ Book Management (Admin Only) - https://nalanda.store/book/
                 Failure (401 Unauthorized): Unauthorized access.
                 Failure (403 Forbidden): Insufficient permissions (not admin).
        
-    7. Book Availability (GET https://nalanda.store/admin/book_availability)
+    7. Book Availability (GET https://nalanda-18pz.onrender.com/admin/book_availability)
 
           Description: Retrieves a summary of book availability.
           Authorization: Bearer token with admin role.
