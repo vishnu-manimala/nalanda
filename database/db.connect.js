@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 module.exports = async(req, res)=>{
     try{
-        await mongoose.connect('mongodb://localhost:27017/Nalanda',{
+        await mongoose.connect('mongodb+srv://vishnu:19rbYHoCl3uC547I@ayra.ovkdvo3.mongodb.net/?retryWrites=true&w=majority&appName=Nalanda',{
             useNewUrlParser: true,
             useUnifiedTopology: true,
         }).then(()=>{
